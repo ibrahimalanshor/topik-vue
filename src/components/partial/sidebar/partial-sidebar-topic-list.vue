@@ -1,5 +1,6 @@
 <script setup>
-import { reactive } from 'vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/outline';
+import { computed, reactive } from 'vue';
 import { useString } from '@/composes/resource.compose';
 import { useFetch } from '@/composes/http.compose';
 import { getTopics } from '@/api/topic.api';
@@ -12,7 +13,9 @@ const { data: topics, error, fetch: fetchTopic } = useFetch(getTopics);
 
 const query = reactive({
   sort: '-id',
+  limit: 10,
 });
+const hasMoreItem = computed(() => query.limit < topics.value.count);
 
 async function loadData() {
   try {
@@ -20,6 +23,12 @@ async function loadData() {
   } catch (err) {
     //
   }
+}
+
+function handleLoadMore() {
+  query.limit += 10;
+
+  loadData();
 }
 
 loadData();
@@ -51,6 +60,17 @@ loadData();
           :key="topic.id"
           :topic="topic"
         />
+
+        <button
+          v-if="hasMoreItem"
+          class="w-full text-gray-400 hover:text-white hover:bg-gray-800 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+          v-on:click="handleLoadMore"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <chevron-down-icon class="w-4 h-4" />
+          </div>
+          <span class="truncate">Load More</span>
+        </button>
       </base-fetch>
     </div>
   </div>

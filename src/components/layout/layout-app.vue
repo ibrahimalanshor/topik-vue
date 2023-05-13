@@ -4,9 +4,7 @@ import PartialSidebar from '@/components/partial/sidebar/partial-sidebar.vue';
 
 <template>
   <div class="flex">
-    <div class="h-screen lg:inset-y-0 lg:z-50 flex lg:w-72 flex-col">
-      <partial-sidebar />
-    </div>
+    <partial-sidebar />
 
     <div class="w-full">
       <slot />
