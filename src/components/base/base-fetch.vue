@@ -11,6 +11,10 @@ const props = defineProps({
     type: String,
     default: 'Empty',
   },
+  errorDismissable: {
+    type: Boolean,
+    default: true,
+  },
 });
 const emit = defineEmits(['update:visibleError']);
 
@@ -30,13 +34,11 @@ const visibleErrorValue = computed({
     color="red"
     size="sm"
     with-icon
-    dismissable
+    :dismissable="props.errorDismissable"
     v-model="visibleErrorValue"
   />
-  <template v-if="!visibleErrorValue">
-    <slot name="empty" v-if="props.count < 1">
-      <base-empty-state :text="props.emptyText" />
-    </slot>
-    <slot v-else />
-  </template>
+  <slot name="empty" v-if="props.count < 1">
+    <base-empty-state :text="props.emptyText" />
+  </slot>
+  <slot v-else />
 </template>
