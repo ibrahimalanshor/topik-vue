@@ -1,4 +1,5 @@
 <script setup>
+import { reactive } from 'vue';
 import { useString } from '@/composes/resource.compose';
 import { useFetch } from '@/composes/http.compose';
 import { getTopics } from '@/api/topic.api';
@@ -9,21 +10,19 @@ import PartialSidebarTopicItem from './partial-sidebar-topic-item.vue';
 const { getString } = useString();
 const { data: topics, error, fetch: fetchTopic } = useFetch(getTopics);
 
+const query = reactive({
+  sort: '-id',
+});
+
 async function loadData() {
   try {
-    await fetchTopic();
+    await fetchTopic(query);
   } catch (err) {
     //
   }
 }
 
 loadData();
-
-// const topics = [
-//   { id: 1, name: 'Heroicons' },
-//   { id: 2, name: 'Tailwind Labs' },
-//   { id: 3, name: 'Workcation' },
-// ];
 </script>
 
 <template>
@@ -39,7 +38,7 @@ loadData();
       >
         <template #empty>
           <base-empty-state
-            text="Empty Topic"
+            :text="getString('common.empty')"
             text-color="white"
             box-size="sm"
             :button="false"

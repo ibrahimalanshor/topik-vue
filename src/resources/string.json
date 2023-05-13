@@ -1,4 +1,7 @@
 {
+    "common": {
+        "empty": "Empty"
+    },
     "sidebar": {
         "label": {
             "new-topic": "New Topic",
