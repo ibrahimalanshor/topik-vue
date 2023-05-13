@@ -15,9 +15,7 @@ const { getString } = useString();
     }}</base-button>
     <nav class="flex flex-1 flex-col">
       <div role="list" class="flex flex-1 flex-col gap-y-7">
-        <div>
-          <partial-sidebar-topic-list />
-        </div>
+        <partial-sidebar-topic-list />
         <div class="mt-auto">
           <a
             href="#"
