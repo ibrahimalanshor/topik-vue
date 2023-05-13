@@ -10,10 +10,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "dayjs": "^1.11.7",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@tailwindcss/forms": "^0.5.3",
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
