@@ -1,0 +1,9 @@
+{
+    "sidebar": {
+        "label": {
+            "new-topic": "New Topic",
+            "setting": "Setting",
+            "topic-list": "Topic List"
+        }
+    }
+}
