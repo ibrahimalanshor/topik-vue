@@ -15,6 +15,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  color: {
+    type: String,
+    default: 'black',
+  },
   placeholder: String,
 });
 const emit = defineEmits(['update:modelValue']);
@@ -28,12 +32,17 @@ const value = computed({
   },
 });
 const style = computed(() => {
+  const colors = {
+    black: 'focus:ring-gray-900',
+  };
+
   return {
     base: [
+      colors[props.color],
       props.textLeading ? 'sm:leading-6' : '',
       props.shadowed ? 'shadow-sm' : '',
       props.bordered
-        ? 'ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
+        ? 'ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset'
         : 'focus:outline-none focus:ring-0',
     ],
   };

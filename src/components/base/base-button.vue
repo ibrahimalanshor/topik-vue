@@ -21,7 +21,7 @@ const props = defineProps({
   },
   block: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   loading: {
     type: Boolean,
@@ -31,12 +31,19 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  classes: {
+    type: Object,
+    default: () => ({
+      button: '',
+    }),
+  },
 });
 const emit = defineEmits(['click']);
 
 const style = computed(() => {
   const colors = {
-    white: 'bg-white text-gray-900 hover:bg-gray-50',
+    white: 'bg-white text-gray-900 hover:bg-gray-50 ring-gray-300',
+    black: 'bg-gray-900 text-white hover:bg-gray-800 ring-gray-900',
   };
   const sizes = {
     xs: 'rounded px-2 py-1 text-xs',
@@ -46,11 +53,12 @@ const style = computed(() => {
     xl: 'rounded-md px-3.5 py-2.5 text-sm',
   };
   return [
+    props.classes.button,
     'font-semibold flex items-center justify-center gap-x-2',
     colors[props.color],
     sizes[props.size],
     props.shadowed ? 'shadow-sm' : '',
-    props.bordered ? 'ring-1 ring-inset ring-gray-300' : '',
+    props.bordered ? 'ring-1 ring-inset' : '',
     props.block ? 'w-full' : '',
   ];
 });
