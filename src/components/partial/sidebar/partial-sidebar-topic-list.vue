@@ -51,6 +51,7 @@ loadData();
       <base-fetch
         :count="topics.meta.count"
         :error="error"
+        :with-loading="false"
         v-model:visible-error="error.value"
       >
         <template #empty>

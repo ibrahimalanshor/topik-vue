@@ -7,8 +7,8 @@ const props = defineProps({
 <template>
   <div>
     <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-    <a
-      href="#"
+    <router-link
+      :to="{ name: 'topic.detail', params: { id: props.topic.id } }"
       class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
     >
       <span
@@ -16,6 +16,6 @@ const props = defineProps({
         >{{ props.topic.name.charAt(0) }}</span
       >
       <span class="truncate">{{ props.topic.name }}</span>
-    </a>
+    </router-link>
   </div>
 </template>
