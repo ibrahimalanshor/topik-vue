@@ -51,6 +51,7 @@ loadData();
       <base-fetch
         :count="topics.meta.count"
         :error="error"
+        :with-loading="false"
         v-model:visible-error="error.value"
       >
         <template #empty>
@@ -78,7 +79,7 @@ loadData();
             <base-spinner size="sm" color="gray" v-if="isLoading" />
             <chevron-down-icon v-else class="w-4 h-4" />
           </div>
-          <span class="truncate">Load More</span>
+          <span class="truncate">{{ getString('common.load-more') }}</span>
         </button>
       </base-fetch>
     </div>

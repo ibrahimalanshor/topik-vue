@@ -4,7 +4,7 @@ import { useError } from './error.compose';
 
 export function useFetch(promiseOrUrl, options = {}) {
   const { error, resetError } = useError();
-  const { isLoading, startLoading, stopLoading } = useLoading();
+  const { isLoading, startLoading, stopLoading } = useLoading(true);
 
   const data = ref(
     options.single
