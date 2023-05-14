@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import BaseSpinner from './base-spinner.vue';
 
 const props = defineProps({
   color: {
@@ -22,7 +23,16 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
+const emit = defineEmits(['click']);
 
 const style = computed(() => {
   const colors = {
@@ -36,7 +46,7 @@ const style = computed(() => {
     xl: 'rounded-md px-3.5 py-2.5 text-sm',
   };
   return [
-    'font-semibold',
+    'font-semibold flex items-center justify-center gap-x-2',
     colors[props.color],
     sizes[props.size],
     props.shadowed ? 'shadow-sm' : '',
@@ -44,10 +54,20 @@ const style = computed(() => {
     props.block ? 'w-full' : '',
   ];
 });
+
+function handleClick() {
+  emit('click');
+}
 </script>
 
 <template>
-  <button type="button" :class="style">
+  <button
+    type="button"
+    :class="style"
+    :disabled="props.disabled"
+    v-on:click="handleClick"
+  >
+    <base-spinner v-if="props.loading" size="sm" color="gray" />
     <slot />
   </button>
 </template>

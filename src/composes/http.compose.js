@@ -47,11 +47,15 @@ export function useFetch(promiseOrUrl, options = {}) {
 }
 
 export function usePost(promiseOrUrl) {
-  const { error } = useError();
+  const { error, resetError } = useError();
+  const { isLoading, startLoading, stopLoading } = useLoading();
 
   async function post(body) {
+    startLoading();
+    resetError();
+
     try {
-      await promiseOrUrl(body);
+      return (await promiseOrUrl(body)).data;
     } catch (err) {
       if (err.response) {
         error.server = true;
@@ -65,8 +69,10 @@ export function usePost(promiseOrUrl) {
       error.value = true;
 
       throw err;
+    } finally {
+      stopLoading();
     }
   }
 
-  return { error, post };
+  return { error, isLoading, post };
 }
