@@ -12,6 +12,6 @@ export async function getTopicById(id) {
   return (await axios.get(`/api/topics/${id}`)).data;
 }
 
-export async function postTopics(body) {
+export async function postTopic(body) {
   return (await axios.post('/api/topics', body)).data;
 }
