@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  block: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const style = computed(() => {
@@ -37,6 +41,7 @@ const style = computed(() => {
     sizes[props.size],
     props.shadowed ? 'shadow-sm' : '',
     props.bordered ? 'ring-1 ring-inset ring-gray-300' : '',
+    props.block ? 'w-full' : '',
   ];
 });
 </script>
