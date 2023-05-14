@@ -7,6 +7,7 @@ import { useString } from '@/composes/resource.compose';
 import BaseInput from '@/components/base/base-input.vue';
 import BaseButton from '@/components/base/base-button.vue';
 import { postChat } from '@/api/chat.api';
+import { getFirstObjectValue } from '@/common/utils/object.util';
 
 const props = defineProps({
   topicId: [Number, String],
@@ -21,10 +22,6 @@ const form = reactive({
   content: null,
   topic_id: props.topicId,
 });
-
-function getFirstObjectValue(obj) {
-  return obj[Object.keys(obj)[0]];
-}
 
 async function handleSubmit() {
   try {
@@ -63,6 +60,7 @@ async function handleSubmit() {
       <form class="mt-6 flex gap-x-4" v-on:submit.prevent="handleSubmit">
         <base-input
           :placeholder="getString('chat.label.start-chat-placeholder')"
+          autofocus
           v-model="form.content"
         />
         <base-button

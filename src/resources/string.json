@@ -15,7 +15,8 @@
         "label": {
             "start-chat-title": "Start Chat",
             "start-chat-description": "Start the topic chat with sending first message",
-            "start-chat-placeholder": "Hello World"
+            "start-chat-placeholder": "Hello World",
+            "content-placeholder": "Enter to save"
         }
     }
 }

@@ -8,6 +8,7 @@ import { getTopicById } from '@/api/topic.api';
 import BaseAlert from '@/components/base/base-alert.vue';
 import BaseFetch from '@/components/base/base-fetch.vue';
 import ChatEmptyState from '@/components/chat/chat-empty-state.vue';
+import ChatCreate from '@/components/chat/chat-create.vue';
 import { getChats } from '@/api/chat.api';
 
 const route = useRoute();
@@ -94,21 +95,11 @@ loadData();
             </div>
           </template>
         </div>
-        <div
-          class="z-40 flex h-16 shrink-0 items-center gap-x-4 border-t border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
-        >
-          <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-            <form class="relative flex flex-1" action="#" method="GET">
-              <input
-                id="search-field"
-                class="block h-full w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                placeholder="Enter to save"
-                type="search"
-                name="search"
-              />
-            </form>
-          </div>
-        </div>
+        <chat-create
+          :topic-id="topic.id"
+          :autofocus="!!chats.meta.count"
+          v-on:created="handleCreatedChat"
+        />
       </template>
     </base-fetch>
   </div>
