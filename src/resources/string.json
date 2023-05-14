@@ -1,6 +1,7 @@
 {
     "common": {
-        "empty": "Empty"
+        "empty": "Empty",
+        "load-more": "Load More"
     },
     "sidebar": {
         "label": {
