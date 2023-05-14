@@ -8,6 +8,10 @@ export async function getTopics(query) {
   ).data;
 }
 
+export async function getTopicById(id) {
+  return (await axios.get(`/api/topics/${id}`)).data;
+}
+
 export async function postTopics(body) {
   return (await axios.post('/api/topics', body)).data;
 }
