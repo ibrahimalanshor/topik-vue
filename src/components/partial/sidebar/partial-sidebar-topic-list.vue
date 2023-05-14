@@ -6,16 +6,24 @@ import { useFetch } from '@/composes/http.compose';
 import { getTopics } from '@/api/topic.api';
 import BaseFetch from '@/components/base/base-fetch.vue';
 import BaseEmptyState from '@/components/base/base-empty-state.vue';
+import BaseSpinner from '@/components/base/base-spinner.vue';
 import PartialSidebarTopicItem from './partial-sidebar-topic-item.vue';
 
 const { getString } = useString();
-const { data: topics, error, fetch: fetchTopic } = useFetch(getTopics);
+const {
+  data: topics,
+  error,
+  isLoading,
+  fetch: fetchTopic,
+} = useFetch(getTopics);
 
 const query = reactive({
   sort: '-id',
   limit: 10,
 });
-const hasMoreItem = computed(() => query.limit < topics.value.count);
+const hasMoreItem = computed(
+  () => topics.value.meta.limit < topics.value.meta.count
+);
 
 async function loadData() {
   try {
@@ -41,7 +49,7 @@ loadData();
     </div>
     <div role="list" class="-mx-2 mt-2 space-y-1">
       <base-fetch
-        :count="topics.count"
+        :count="topics.meta.count"
         :error="error"
         v-model:visible-error="error.value"
       >
@@ -67,7 +75,8 @@ loadData();
           v-on:click="handleLoadMore"
         >
           <div class="w-6 h-6 flex items-center justify-center">
-            <chevron-down-icon class="w-4 h-4" />
+            <base-spinner size="sm" color="gray" v-if="isLoading" />
+            <chevron-down-icon v-else class="w-4 h-4" />
           </div>
           <span class="truncate">Load More</span>
         </button>

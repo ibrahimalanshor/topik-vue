@@ -1,22 +1,28 @@
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
+import { useLoading } from './loading.compose';
+import { useError } from './error.compose';
 
 export function useFetch(promiseOrUrl, options = {}) {
+  const { error, resetError } = useError();
+  const { isLoading, startLoading, stopLoading } = useLoading();
+
   const data = ref(
     options.single
       ? null
       : {
-          count: 0,
+          meta: {
+            count: 0,
+            limit: 10,
+            offset: 10,
+          },
           data: [],
         }
   );
-  const error = reactive({
-    server: false,
-    message: null,
-    errors: null,
-    value: false,
-  });
 
   async function fetch(query) {
+    startLoading();
+    resetError();
+
     try {
       data.value = (await promiseOrUrl(query)).data;
     } catch (err) {
@@ -32,19 +38,16 @@ export function useFetch(promiseOrUrl, options = {}) {
       error.value = true;
 
       throw err;
+    } finally {
+      stopLoading();
     }
   }
 
-  return { data, error, fetch };
+  return { data, error, isLoading, fetch };
 }
 
 export function usePost(promiseOrUrl) {
-  const error = reactive({
-    server: false,
-    message: null,
-    errors: null,
-    value: false,
-  });
+  const { error } = useError();
 
   async function post(body) {
     try {
