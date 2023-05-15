@@ -57,6 +57,8 @@ async function handleSubmit() {
     <form class="w-full" v-on:submit.prevent="handleSubmit">
       <base-input
         :bordered="false"
+        :shadowed="false"
+        :rounded="false"
         :autofocus="props.autofocus"
         custom-size="p-0"
         :placeholder="getString('chat.label.content-placeholder')"

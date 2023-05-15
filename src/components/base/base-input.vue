@@ -15,6 +15,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  rounded: {
+    type: Boolean,
+    default: true,
+  },
   autofocus: {
     type: Boolean,
     default: true,
@@ -47,6 +51,7 @@ const style = computed(() => {
       colors[props.color],
       props.textLeading ? 'sm:leading-6' : '',
       props.shadowed ? 'shadow-sm' : '',
+      props.rounded ? 'rounded-md' : '',
       props.bordered
         ? 'ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset'
         : 'focus:outline-none focus:ring-0',
@@ -75,7 +80,7 @@ watch(
   <input
     ref="input"
     type="text"
-    class="block w-full rounded-md border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
+    class="block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
     :class="style.base"
     :placeholder="props.placeholder"
     v-model="value"

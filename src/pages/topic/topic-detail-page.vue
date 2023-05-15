@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import dayjs from 'dayjs';
 import { useFetch } from '@/composes/http.compose';
@@ -18,16 +18,18 @@ const {
   fetch: fetchTopicById,
 } = useFetch(getTopicById, { single: true });
 const { data: chats, error: chatError, fetch: fetchChats } = useFetch(getChats);
-
-const error = computed(() => (topicError.value ? topicError : chatError));
-
 const {
   isLoading: isInitLoading,
   startLoading,
   stopLoading,
 } = useLoading(true);
+
+const error = computed(() => (topicError.value ? topicError : chatError));
+const reversedChats = computed(() => chats.value.data.toReversed());
 const fetchChatsQuery = reactive({
+  sort: '-id',
   topic_id: route.params.id,
+  limit: 30,
 });
 
 async function loadData() {
@@ -37,7 +39,7 @@ async function loadData() {
     await fetchTopicById(route.params.id);
     await fetchChats(fetchChatsQuery);
   } catch (err) {
-    //
+    console.log(err);
   } finally {
     stopLoading();
   }
@@ -45,6 +47,17 @@ async function loadData() {
 
 async function handleCreatedChat() {
   await fetchChats(fetchChatsQuery);
+}
+function handleScrollChatList(e) {
+  if (
+    e.target.scrollTop === 0 &&
+    chats.value.meta.count > 0 &&
+    fetchChatsQuery.limit < chats.value.meta.count
+  ) {
+    fetchChatsQuery.limit += 10;
+
+    loadData();
+  }
 }
 
 loadData();
@@ -76,7 +89,10 @@ loadData();
             {{ topic.name }}
           </h2>
         </div>
-        <div class="flex-grow max-h-screen overflow-y-auto py-4">
+        <div
+          class="flex-grow max-h-screen overflow-y-auto py-4"
+          v-on:scroll="handleScrollChatList"
+        >
           <chat-empty-state
             v-if="chats.meta.count < 1"
             :topic-id="topic.id"
@@ -84,7 +100,7 @@ loadData();
           />
           <template v-else>
             <div
-              v-for="chat in chats.data"
+              v-for="chat in reversedChats"
               :key="chat"
               class="flex gap-x-4 hover:bg-gray-100 py-1 px-8"
             >
