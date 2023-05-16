@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import dayjs from 'dayjs';
 import { useFetch } from '@/composes/http.compose';
@@ -24,6 +24,7 @@ const {
   stopLoading,
 } = useLoading(true);
 
+const chatWrapper = ref();
 const error = computed(() => (topicError.value ? topicError : chatError));
 const reversedChats = computed(() => chats.value.data.toReversed());
 const fetchChatsQuery = reactive({
@@ -47,6 +48,9 @@ async function loadData() {
 
 async function handleCreatedChat() {
   await fetchChats(fetchChatsQuery);
+
+  chatWrapper.value.scrollTop =
+    chatWrapper.value.scrollHeight - chatWrapper.value.clientHeight;
 }
 function handleScrollChatList(e) {
   if (
@@ -90,6 +94,7 @@ loadData();
           </h2>
         </div>
         <div
+          ref="chatWrapper"
           class="flex-grow max-h-screen overflow-y-auto py-4"
           v-on:scroll="handleScrollChatList"
         >
