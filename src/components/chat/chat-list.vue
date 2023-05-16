@@ -16,8 +16,6 @@ const props = defineProps({
 const emit = defineEmits(['created', 'load-more']);
 
 const emitter = inject('emitter');
-const chatWrapper = ref();
-const chatListWrapper = ref();
 const checkpoint = reactive({
   offsetTop: 0,
   scrollHeight: 0,
@@ -25,15 +23,19 @@ const checkpoint = reactive({
 const reversedChats = computed(() => props.chats.data.toReversed());
 
 function scrollToBottom() {
-  chatWrapper.value.scrollTop =
-    chatWrapper.value.scrollHeight - chatWrapper.value.clientHeight;
+  const chatWrapper = document.querySelector('#chatWrapper');
+
+  chatWrapper.scrollTop = chatWrapper.scrollHeight - chatWrapper.clientHeight;
 }
-function scrollToTopCheckpoint() {
-  chatWrapper.value.scrollTop =
-    chatWrapper.value.scrollHeight -
+function scrollToCheckpoint() {
+  const chatWrapper = document.querySelector('#chatWrapper');
+  const chatListWrapper = document.querySelector('#chatListWrapper');
+
+  chatWrapper.scrollTop =
+    chatWrapper.scrollHeight -
     checkpoint.scrollHeight +
     checkpoint.offsetTop -
-    chatListWrapper.value.offsetTop;
+    chatListWrapper.offsetTop;
 }
 
 function handleScroll(e) {
@@ -42,8 +44,11 @@ function handleScroll(e) {
     props.chats.meta.count > 0 &&
     props.query.limit < props.chats.meta.count
   ) {
-    checkpoint.offsetTop = chatListWrapper.value.firstElementChild.offsetTop;
-    checkpoint.scrollHeight = chatWrapper.value.scrollHeight;
+    const chatWrapper = document.querySelector('#chatWrapper');
+    const chatListWrapper = document.querySelector('#chatListWrapper');
+
+    checkpoint.offsetTop = chatListWrapper.firstElementChild.offsetTop;
+    checkpoint.scrollHeight = chatWrapper.scrollHeight;
 
     emit('load-more');
   }
@@ -56,7 +61,7 @@ emitter.on('chat-created-and-reloaded', () => {
   scrollToBottom();
 });
 emitter.on('chat-loaded-more', () => {
-  scrollToTopCheckpoint();
+  scrollToCheckpoint();
 });
 
 onMounted(() => {
@@ -66,7 +71,7 @@ onMounted(() => {
 
 <template>
   <div
-    ref="chatWrapper"
+    id="chatWrapper"
     class="flex-grow max-h-screen overflow-y-auto py-4"
     v-on:scroll="handleScroll"
   >
@@ -79,7 +84,7 @@ onMounted(() => {
       <div v-if="props.loading" class="flex justify-center mb-4">
         <base-spinner color="gray" />
       </div>
-      <div ref="chatListWrapper">
+      <div id="chatListWrapper">
         <div
           v-for="chat in reversedChats"
           :key="chat"

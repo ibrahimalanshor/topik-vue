@@ -27,7 +27,7 @@ const {
   isLoading: isLoadMoreLoading,
   startLoading: startLoadMoreLoading,
   stopLoading: stopLoadMoreLoading,
-} = useLoading(true);
+} = useLoading();
 
 const error = computed(() => (topicError.value ? topicError : chatError));
 const fetchChatsQuery = reactive({
@@ -59,13 +59,13 @@ async function handleCreatedChat() {
 
   emitter.emit('chat-created-and-reloaded');
 }
-async function handleLoadMore(e) {
+async function handleLoadMore() {
   try {
     startLoadMoreLoading();
 
     fetchChatsQuery.limit += 30;
 
-    await loadData();
+    await fetchChats(fetchChatsQuery);
 
     emitter.emit('chat-loaded-more');
   } finally {
