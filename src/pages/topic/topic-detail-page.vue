@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref, inject } from 'vue';
+import { computed, reactive, ref, inject, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFetch } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
@@ -57,15 +57,17 @@ async function init() {
 async function handleCreatedChat() {
   await fetchChats(fetchChatsQuery);
 
-  emitter.emit('task-created-and-reloaded');
+  emitter.emit('chat-created-and-reloaded');
 }
 async function handleLoadMore(e) {
   try {
     startLoadMoreLoading();
 
-    fetchChatsQuery.limit += 10;
+    fetchChatsQuery.limit += 30;
 
     await loadData();
+
+    emitter.emit('chat-loaded-more');
   } finally {
     stopLoadMoreLoading();
   }
