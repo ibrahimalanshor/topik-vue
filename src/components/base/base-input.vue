@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 
 const props = defineProps({
   modelValue: null,
@@ -15,10 +15,24 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  rounded: {
+    type: Boolean,
+    default: true,
+  },
+  autofocus: {
+    type: Boolean,
+    default: true,
+  },
+  color: {
+    type: String,
+    default: 'black',
+  },
   placeholder: String,
+  customSize: String,
 });
 const emit = defineEmits(['update:modelValue']);
 
+const input = ref();
 const value = computed({
   get: function () {
     return props.modelValue;
@@ -28,22 +42,45 @@ const value = computed({
   },
 });
 const style = computed(() => {
+  const colors = {
+    black: 'focus:ring-gray-900',
+  };
+
   return {
     base: [
+      colors[props.color],
       props.textLeading ? 'sm:leading-6' : '',
       props.shadowed ? 'shadow-sm' : '',
+      props.rounded ? 'rounded-md' : '',
       props.bordered
-        ? 'ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600'
+        ? 'ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset'
         : 'focus:outline-none focus:ring-0',
+      props.customSize ?? 'py-1.5',
     ],
   };
 });
+
+function setAutofocus() {
+  props.autofocus && input.value.focus();
+}
+
+onMounted(() => {
+  setAutofocus();
+});
+
+watch(
+  () => props.autofocus,
+  () => {
+    setAutofocus();
+  }
+);
 </script>
 
 <template>
   <input
+    ref="input"
     type="text"
-    class="block w-full rounded-md border-0 py-1.5 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
+    class="block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
     :class="style.base"
     :placeholder="props.placeholder"
     v-model="value"

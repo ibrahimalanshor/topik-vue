@@ -1,13 +1,22 @@
 {
     "common": {
         "empty": "Empty",
-        "load-more": "Load More"
+        "load-more": "Load More",
+        "send": "Send"
     },
     "sidebar": {
         "label": {
             "new-topic": "New Topic",
             "setting": "Setting",
             "topic-list": "Topic List"
+        }
+    },
+    "chat": {
+        "label": {
+            "start-chat-title": "Start Chat",
+            "start-chat-description": "Start the topic chat with sending first message",
+            "start-chat-placeholder": "Hello World",
+            "content-placeholder": "Enter to save"
         }
     }
 }
