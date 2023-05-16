@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFetch } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
@@ -10,6 +10,7 @@ import ChatCreate from '@/components/chat/chat-create.vue';
 import ChatList from '@/components/chat/chat-list.vue';
 import { getChats } from '@/api/chat.api';
 
+const emitter = inject('emitter');
 const route = useRoute();
 const {
   data: topic,
@@ -23,7 +24,6 @@ const {
   stopLoading,
 } = useLoading(true);
 
-const chatWrapper = ref();
 const error = computed(() => (topicError.value ? topicError : chatError));
 const fetchChatsQuery = reactive({
   sort: '-id',
@@ -51,6 +51,8 @@ async function init() {
 
 async function handleCreatedChat() {
   await fetchChats(fetchChatsQuery);
+
+  emitter.emit('task-created-and-reloaded');
 }
 function handleLoadMore(e) {
   fetchChatsQuery.limit += 10;

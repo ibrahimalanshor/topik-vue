@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, inject } from 'vue';
 import dayjs from 'dayjs';
 import ChatEmptyState from './chat-empty-state.vue';
 
@@ -10,6 +10,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['created', 'load-more']);
 
+const emitter = inject('emitter');
 const chatWrapper = ref();
 const reversedChats = computed(() => props.chats.data.toReversed());
 
@@ -30,6 +31,10 @@ function handleScroll(e) {
 function handleCreated() {
   emit('created');
 }
+
+emitter.on('task-created-and-reloaded', () => {
+  scrollToBottom();
+});
 
 onMounted(() => {
   scrollToBottom();

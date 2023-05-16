@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, inject } from 'vue';
 import { useToastStore } from '@/store/modules/toast.store';
 import { useString } from '@/composes/resource.compose';
 import { usePost } from '@/composes/http.compose';
@@ -16,6 +16,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['created']);
 
+const emitter = inject('emitter');
 const toastStore = useToastStore();
 const { getString } = useString();
 const { error, post: storeChat } = usePost(postChat);
@@ -35,6 +36,7 @@ async function handleSubmit() {
     resetForm();
 
     emit('created');
+    emitter.emit('chat-created');
   } catch (err) {
     const message =
       error.server && error.errors.status === 422
