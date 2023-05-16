@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref, reactive, onMounted, inject } from 'vue';
-import dayjs from 'dayjs';
+import { isSameDay, formatDate } from '@/common/utils/date.util';
 import BaseSpinner from '@/components/base/base-spinner.vue';
+import BaseSeparator from '@/components/base/base-separator.vue';
 import ChatEmptyState from './chat-empty-state.vue';
 
 const props = defineProps({
@@ -36,6 +37,12 @@ function scrollToCheckpoint() {
     checkpoint.scrollHeight +
     checkpoint.offsetTop -
     chatListWrapper.offsetTop;
+}
+function checkIsNewDayChat(index, chat) {
+  return (
+    index === 0 ||
+    !isSameDay(chat.created_at, reversedChats.value[index - 1].created_at)
+  );
 }
 
 function handleScroll(e) {
@@ -85,16 +92,20 @@ onMounted(() => {
         <base-spinner color="gray" />
       </div>
       <div id="chatListWrapper">
-        <div
-          v-for="chat in reversedChats"
-          :key="chat"
-          class="flex gap-x-4 hover:bg-gray-100 py-1 px-8"
-        >
-          <p class="flex-shrink-0 font-light text-gray-500">
-            {{ dayjs(chat.created_at).format('HH:mm:ss') }}
-          </p>
-          <p class="inline text-gray-900">{{ chat.content }}</p>
-        </div>
+        <template v-for="(chat, index) in reversedChats" :key="chat">
+          <base-separator
+            :class="[index === 0 ? 'mb-2' : 'my-2']"
+            v-if="checkIsNewDayChat(index, chat)"
+          >
+            {{ formatDate(chat.created_at, 'DD MMMM YYYY') }}
+          </base-separator>
+          <div class="flex gap-x-4 hover:bg-gray-100 py-1 px-8">
+            <p class="flex-shrink-0 font-light text-gray-500">
+              {{ formatDate(chat.created_at, 'HH:mm:ss') }}
+            </p>
+            <p class="inline text-gray-900">{{ chat.content }}</p>
+          </div>
+        </template>
       </div>
     </template>
   </div>
