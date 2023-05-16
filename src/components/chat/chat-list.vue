@@ -1,12 +1,17 @@
 <script setup>
 import { computed, ref, onMounted, inject } from 'vue';
 import dayjs from 'dayjs';
+import BaseSpinner from '@/components/base/base-spinner.vue';
 import ChatEmptyState from './chat-empty-state.vue';
 
 const props = defineProps({
   chats: Object,
   topic: Object,
   query: Object,
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 const emit = defineEmits(['created', 'load-more']);
 
@@ -53,6 +58,9 @@ onMounted(() => {
       v-on:created="handleCreated"
     />
     <template v-else>
+      <div v-if="props.loading" class="flex justify-center mb-4">
+        <base-spinner color="gray" />
+      </div>
       <div
         v-for="chat in reversedChats"
         :key="chat"

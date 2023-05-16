@@ -20,8 +20,13 @@ const {
 const { data: chats, error: chatError, fetch: fetchChats } = useFetch(getChats);
 const {
   isLoading: isInitLoading,
-  startLoading,
-  stopLoading,
+  startLoading: startInitLoading,
+  stopLoading: stopInitLoading,
+} = useLoading(true);
+const {
+  isLoading: isLoadMoreLoading,
+  startLoading: startLoadMoreLoading,
+  stopLoading: stopLoadMoreLoading,
 } = useLoading(true);
 
 const error = computed(() => (topicError.value ? topicError : chatError));
@@ -41,11 +46,11 @@ async function loadData() {
 }
 async function init() {
   try {
-    startLoading();
+    startInitLoading();
 
     await loadData();
   } finally {
-    stopLoading();
+    stopInitLoading();
   }
 }
 
@@ -54,10 +59,16 @@ async function handleCreatedChat() {
 
   emitter.emit('task-created-and-reloaded');
 }
-function handleLoadMore(e) {
-  fetchChatsQuery.limit += 10;
+async function handleLoadMore(e) {
+  try {
+    startLoadMoreLoading();
 
-  loadData();
+    fetchChatsQuery.limit += 10;
+
+    await loadData();
+  } finally {
+    stopLoadMoreLoading();
+  }
 }
 
 init();
@@ -93,6 +104,7 @@ init();
           :chats="chats"
           :topic="topic"
           :query="fetchChatsQuery"
+          :loading="isLoadMoreLoading"
           v-on:load-more="handleLoadMore"
           v-on:created="handleCreatedChat"
         />
