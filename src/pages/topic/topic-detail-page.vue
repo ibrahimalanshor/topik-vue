@@ -1,14 +1,13 @@
 <script setup>
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import dayjs from 'dayjs';
 import { useFetch } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
 import { getTopicById } from '@/api/topic.api';
 import BaseAlert from '@/components/base/base-alert.vue';
 import BaseFetch from '@/components/base/base-fetch.vue';
-import ChatEmptyState from '@/components/chat/chat-empty-state.vue';
 import ChatCreate from '@/components/chat/chat-create.vue';
+import ChatList from '@/components/chat/chat-list.vue';
 import { getChats } from '@/api/chat.api';
 
 const route = useRoute();
@@ -26,7 +25,6 @@ const {
 
 const chatWrapper = ref();
 const error = computed(() => (topicError.value ? topicError : chatError));
-const reversedChats = computed(() => chats.value.data.toReversed());
 const fetchChatsQuery = reactive({
   sort: '-id',
   topic_id: route.params.id,
@@ -35,12 +33,17 @@ const fetchChatsQuery = reactive({
 
 async function loadData() {
   try {
-    startLoading();
-
     await fetchTopicById(route.params.id);
     await fetchChats(fetchChatsQuery);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
+  }
+}
+async function init() {
+  try {
+    startLoading();
+
+    await loadData();
   } finally {
     stopLoading();
   }
@@ -48,23 +51,14 @@ async function loadData() {
 
 async function handleCreatedChat() {
   await fetchChats(fetchChatsQuery);
-
-  chatWrapper.value.scrollTop =
-    chatWrapper.value.scrollHeight - chatWrapper.value.clientHeight;
 }
-function handleScrollChatList(e) {
-  if (
-    e.target.scrollTop === 0 &&
-    chats.value.meta.count > 0 &&
-    fetchChatsQuery.limit < chats.value.meta.count
-  ) {
-    fetchChatsQuery.limit += 10;
+function handleLoadMore(e) {
+  fetchChatsQuery.limit += 10;
 
-    loadData();
-  }
+  loadData();
 }
 
-loadData();
+init();
 </script>
 
 <template>
@@ -93,29 +87,13 @@ loadData();
             {{ topic.name }}
           </h2>
         </div>
-        <div
-          ref="chatWrapper"
-          class="flex-grow max-h-screen overflow-y-auto py-4"
-          v-on:scroll="handleScrollChatList"
-        >
-          <chat-empty-state
-            v-if="chats.meta.count < 1"
-            :topic-id="topic.id"
-            v-on:created="handleCreatedChat"
-          />
-          <template v-else>
-            <div
-              v-for="chat in reversedChats"
-              :key="chat"
-              class="flex gap-x-4 hover:bg-gray-100 py-1 px-8"
-            >
-              <p class="flex-shrink-0 font-light text-gray-500">
-                {{ dayjs(chat.created_at).format('HH:mm:ss') }}
-              </p>
-              <p class="inline text-gray-900">{{ chat.content }}</p>
-            </div>
-          </template>
-        </div>
+        <chat-list
+          :chats="chats"
+          :topic="topic"
+          :query="fetchChatsQuery"
+          v-on:load-more="handleLoadMore"
+          v-on:created="handleCreatedChat"
+        />
         <chat-create
           :topic-id="topic.id"
           :autofocus="!!chats.meta.count"
