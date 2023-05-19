@@ -1,14 +1,15 @@
 <script setup>
 import { computed, reactive, ref, inject, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import { useFetch } from '@/composes/http.compose';
+import { useFetch, usePost } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
-import { getTopicById } from '@/api/topic.api';
+import { getTopicById, patchTopic } from '@/api/topic.api';
+import { getChats } from '@/api/chat.api';
+import { getTopicName } from '@/common/modules/topic/topic.util';
 import BaseAlert from '@/components/base/base-alert.vue';
 import BaseFetch from '@/components/base/base-fetch.vue';
 import ChatCreate from '@/components/chat/chat-create.vue';
 import ChatList from '@/components/chat/chat-list.vue';
-import { getChats } from '@/api/chat.api';
 
 const emitter = inject('emitter');
 const route = useRoute();
@@ -16,8 +17,10 @@ const {
   data: topic,
   error: topicError,
   fetch: fetchTopicById,
+  setData: setTopic,
 } = useFetch(getTopicById, { single: true });
 const { data: chats, error: chatError, fetch: fetchChats } = useFetch(getChats);
+const { post: updateTopic } = usePost();
 const {
   isLoading: isInitLoading,
   startLoading: startInitLoading,
@@ -54,10 +57,25 @@ async function init() {
   }
 }
 
-async function handleCreatedChat() {
-  await fetchChats(fetchChatsQuery);
+async function handleCreatedChat(chat) {
+  try {
+    await fetchChats(fetchChatsQuery);
 
-  emitter.emit('chat-created-and-reloaded');
+    if (!topic.value.name) {
+      const res = await updateTopic(
+        async () =>
+          await patchTopic(topic.value.id, { name: chat.content.substr(0, 20) })
+      );
+
+      setTopic(res);
+
+      emitter.emit('topic-updated');
+    }
+
+    emitter.emit('chat-created-and-reloaded');
+  } catch (err) {
+    // console.log(err)
+  }
 }
 async function handleLoadMore() {
   try {
@@ -99,7 +117,7 @@ init();
           class="z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
         >
           <h2 class="font-semibold text-sm leading-6 text-gray-900">
-            {{ topic.name }}
+            {{ getTopicName(topic) }}
           </h2>
         </div>
         <chat-list

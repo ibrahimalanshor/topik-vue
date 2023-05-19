@@ -60,8 +60,8 @@ function handleScroll(e) {
     emit('load-more');
   }
 }
-function handleCreated() {
-  emit('created');
+function handleCreated(chat) {
+  emit('created', chat);
 }
 
 emitter.on('chat-created-and-reloaded', () => {

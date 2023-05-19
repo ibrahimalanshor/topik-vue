@@ -25,9 +25,9 @@ const form = reactive({
 
 async function handleSubmit() {
   try {
-    await storeChat(form);
+    const chat = await storeChat(form);
 
-    emit('created');
+    emit('created', chat);
   } catch (err) {
     const message =
       error.server && error.errors.status === 422

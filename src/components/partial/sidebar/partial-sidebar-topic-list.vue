@@ -33,6 +33,11 @@ async function loadData() {
     //
   }
 }
+function refresh() {
+  query.limit = 10;
+
+  loadData();
+}
 
 function handleLoadMore() {
   query.limit += 10;
@@ -40,13 +45,14 @@ function handleLoadMore() {
   loadData();
 }
 
-loadData();
-
 emitter.on('topic-created', () => {
-  query.limit = 10;
-
-  loadData();
+  refresh();
 });
+emitter.on('topic-updated', () => {
+  refresh();
+});
+
+loadData();
 </script>
 
 <template>
