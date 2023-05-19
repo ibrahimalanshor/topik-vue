@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { getTopicName } from '@/common/modules/topic/topic.util';
 
 const props = defineProps({
   topic: Object,
@@ -25,9 +26,9 @@ const active = computed(() => route.params.id == props.topic.id);
     >
       <span
         class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white"
-        >{{ props.topic.name.charAt(0) }}</span
+        >{{ getTopicName(props.topic).charAt(0) }}</span
       >
-      <span class="truncate">{{ props.topic.name }}</span>
+      <span class="truncate">{{ getTopicName(props.topic) }}</span>
     </router-link>
   </div>
 </template>

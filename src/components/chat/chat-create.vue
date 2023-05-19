@@ -32,10 +32,10 @@ function resetForm() {
 
 async function handleSubmit() {
   try {
-    await storeChat(form);
+    const chat = await storeChat(form);
     resetForm();
 
-    emit('created');
+    emit('created', chat);
     emitter.emit('chat-created');
   } catch (err) {
     const message =

@@ -19,6 +19,10 @@ export function useFetch(promiseOrUrl, options = {}) {
         }
   );
 
+  function setData(value) {
+    data.value = value;
+  }
+
   async function fetch(query) {
     startLoading();
     resetError();
@@ -43,19 +47,23 @@ export function useFetch(promiseOrUrl, options = {}) {
     }
   }
 
-  return { data, error, isLoading, fetch };
+  return { data, error, isLoading, fetch, setData };
 }
 
 export function usePost(promiseOrUrl) {
   const { error, resetError } = useError();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
-  async function post(body) {
+  async function post(bodyOrPromise) {
     startLoading();
     resetError();
 
     try {
-      return (await promiseOrUrl(body)).data;
+      return (
+        typeof bodyOrPromise === 'function'
+          ? await bodyOrPromise()
+          : await promiseOrUrl(bodyOrPromise)
+      ).data;
     } catch (err) {
       if (err.response) {
         error.server = true;
