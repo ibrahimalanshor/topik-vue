@@ -52,7 +52,7 @@ function handleClose() {
       class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
     ></div>
 
-    <div class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 z-50">
       <div
         class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
       >
@@ -67,7 +67,7 @@ function handleClose() {
                 To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             -->
         <base-card
-          class="relative transform overflow-hidden shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm"
+          class="relative shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm"
           :title="props.title"
           :with-header="props.withHeader"
           v-click-outside="handleClose"

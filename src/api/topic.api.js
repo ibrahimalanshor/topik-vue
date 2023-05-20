@@ -19,3 +19,7 @@ export async function postTopic(body) {
 export async function patchTopic(id, body) {
   return (await axios.patch(`/api/topics/${id}`, body)).data;
 }
+
+export async function deleteTopic(id) {
+  return (await axios.delete(`/api/topics/${id}`)).data;
+}

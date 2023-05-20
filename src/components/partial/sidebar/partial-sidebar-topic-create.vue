@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue';
 import { useString } from '@/composes/resource.compose';
-import { usePost } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { postTopic } from '@/api/topic.api';
 import BaseButton from '@/components/base/base-button.vue';
 import { useRouter } from 'vue-router';
@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 const emitter = inject('emitter');
 const router = useRouter();
 const { getString } = useString();
-const { isLoading, post: storeTopic } = usePost(postTopic);
+const { isLoading, request: storeTopic } = useRequest(postTopic);
 
 async function handleCreate() {
   try {

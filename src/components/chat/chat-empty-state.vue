@@ -1,7 +1,7 @@
 <script setup>
 import { reactive } from 'vue';
 import { ChatBubbleBottomCenterIcon } from '@heroicons/vue/24/outline';
-import { usePost } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { useToastStore } from '@/store/modules/toast.store';
 import { useString } from '@/composes/resource.compose';
 import BaseInput from '@/components/base/base-input.vue';
@@ -16,7 +16,7 @@ const emit = defineEmits(['created']);
 
 const toastStore = useToastStore();
 const { getString } = useString();
-const { isLoading, error, post: storeChat } = usePost(postChat);
+const { isLoading, error, request: storeChat } = useRequest(postChat);
 
 const form = reactive({
   content: null,
