@@ -29,6 +29,11 @@ const props = defineProps({
   },
   placeholder: String,
   customSize: String,
+  label: String,
+  withLabel: {
+    type: Boolean,
+    default: false,
+  },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -77,12 +82,21 @@ watch(
 </script>
 
 <template>
-  <input
-    ref="input"
-    type="text"
-    class="block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
-    :class="style.base"
-    :placeholder="props.placeholder"
-    v-model="value"
-  />
+  <div>
+    <label
+      v-if="props.withLabel"
+      class="block text-sm font-medium leading-6 text-gray-900"
+      >{{ props.label }}</label
+    >
+    <div :class="{ 'mt-2': props.withLabel }">
+      <input
+        ref="input"
+        type="text"
+        class="block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
+        :class="style.base"
+        :placeholder="props.placeholder"
+        v-model="value"
+      />
+    </div>
+  </div>
 </template>
