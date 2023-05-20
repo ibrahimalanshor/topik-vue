@@ -8,7 +8,9 @@ const toasts = computed(() => toastStore.toasts);
 </script>
 
 <template>
-  <div class="fixed top-4 left-1/2 z-50 min-w-[25%] -translate-x-1/2 space-y-2">
+  <div
+    class="fixed top-4 left-1/2 z-[60] min-w-[25%] -translate-x-1/2 space-y-2"
+  >
     <base-alert
       v-for="toast in toasts"
       :key="toast.id"

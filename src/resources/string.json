@@ -2,13 +2,23 @@
     "common": {
         "empty": "Empty",
         "load-more": "Load More",
-        "send": "Send"
+        "send": "Send",
+        "edit": "Edit",
+        "save": "Save"
     },
     "sidebar": {
         "label": {
             "new-topic": "New Topic",
             "setting": "Setting",
             "topic-list": "Topic List"
+        }
+    },
+    "topic": {
+        "attributes": {
+            "name": "Name"
+        },
+        "message": {
+            "updated": "Topic Updated"
         }
     },
     "chat": {

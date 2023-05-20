@@ -1,15 +1,18 @@
 <script setup>
-import { computed, reactive, ref, inject, nextTick } from 'vue';
+import { computed, reactive, ref, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFetch, usePost } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
+import { useString } from '@/composes/resource.compose';
 import { getTopicById, patchTopic } from '@/api/topic.api';
 import { getChats } from '@/api/chat.api';
 import { getTopicName } from '@/common/modules/topic/topic.util';
 import BaseAlert from '@/components/base/base-alert.vue';
+import BaseLink from '@/components/base/base-link.vue';
 import BaseFetch from '@/components/base/base-fetch.vue';
 import ChatCreate from '@/components/chat/chat-create.vue';
 import ChatList from '@/components/chat/chat-list.vue';
+import TopicEditModal from '@/components/topic/topic-edit-modal.vue';
 
 const emitter = inject('emitter');
 const route = useRoute();
@@ -31,6 +34,7 @@ const {
   startLoading: startLoadMoreLoading,
   stopLoading: stopLoadMoreLoading,
 } = useLoading();
+const { getString } = useString();
 
 const error = computed(() => (topicError.value ? topicError : chatError));
 const fetchChatsQuery = reactive({
@@ -38,10 +42,14 @@ const fetchChatsQuery = reactive({
   topic_id: route.params.id,
   limit: 30,
 });
+const editTopicModalVisible = ref(false);
 
+async function loadTopic() {
+  await fetchTopicById(route.params.id);
+}
 async function loadData() {
   try {
-    await fetchTopicById(route.params.id);
+    await loadTopic();
     await fetchChats(fetchChatsQuery);
   } catch (err) {
     // console.log(err);
@@ -90,6 +98,12 @@ async function handleLoadMore() {
     stopLoadMoreLoading();
   }
 }
+function handleEdit() {
+  editTopicModalVisible.value = true;
+}
+function handleUpdated(res) {
+  setTopic(res);
+}
 
 init();
 </script>
@@ -114,11 +128,16 @@ init();
 
       <template v-if="!error.value">
         <div
-          class="z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
+          class="group z-40 flex h-16 shrink-0 items-center border-b border-gray-200 bg-white px-4 shadow-sm sm:px-6 lg:px-8 gap-x-4"
         >
           <h2 class="font-semibold text-sm leading-6 text-gray-900">
             {{ getTopicName(topic) }}
           </h2>
+          <base-link
+            v-on:click="handleEdit"
+            class="text-xs hidden group-hover:block mt-0.5"
+            >{{ getString('common.edit') }}</base-link
+          >
         </div>
         <chat-list
           :chats="chats"
@@ -132,6 +151,12 @@ init();
           :topic-id="topic.id"
           :autofocus="!!chats.meta.count"
           v-on:created="handleCreatedChat"
+        />
+
+        <topic-edit-modal
+          :topic="topic"
+          v-model="editTopicModalVisible"
+          v-on:success="handleUpdated"
         />
       </template>
     </base-fetch>
