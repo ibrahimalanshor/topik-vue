@@ -4,6 +4,7 @@ import { isSameDay, formatDate } from '@/common/utils/date.util';
 import BaseSpinner from '@/components/base/base-spinner.vue';
 import BaseSeparator from '@/components/base/base-separator.vue';
 import ChatEmptyState from './chat-empty-state.vue';
+import ChatListItem from './chat-list-item.vue';
 
 const props = defineProps({
   chats: Object,
@@ -99,12 +100,7 @@ onMounted(() => {
           >
             {{ formatDate(chat.created_at, 'DD MMMM YYYY') }}
           </base-separator>
-          <div class="flex gap-x-4 hover:bg-gray-100 py-1 px-8">
-            <p class="flex-shrink-0 font-light text-gray-500">
-              {{ formatDate(chat.created_at, 'HH:mm:ss') }}
-            </p>
-            <p class="inline text-gray-900">{{ chat.content }}</p>
-          </div>
+          <chat-list-item :chat="chat" />
         </template>
       </div>
     </template>
