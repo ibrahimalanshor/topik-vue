@@ -2,7 +2,7 @@
 import { computed, inject, reactive, ref, watch } from 'vue';
 import { useString } from '@/composes/resource.compose';
 import { useToastStore } from '@/store/modules/toast.store';
-import { usePost } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { patchTopic } from '@/api/topic.api';
 import { getFirstObjectValue } from '@/common/utils/object.util';
 import BaseModal from '@/components/base/base-modal.vue';
@@ -22,7 +22,7 @@ const emit = defineEmits(['update:modelValue', 'success', 'deleted']);
 const emitter = inject('emitter');
 const { getString } = useString();
 const toastStore = useToastStore();
-const { post: updateTopic, isLoading, error } = usePost();
+const { request: updateTopic, isLoading, error } = useRequest();
 
 const visible = computed({
   get: function () {

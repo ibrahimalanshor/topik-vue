@@ -93,6 +93,9 @@ export function useRequest(promise, options = {}) {
 
   const res = ref(initResponse);
 
+  function setRes(value) {
+    res.value = value;
+  }
   async function request(paramsOrPromise) {
     startLoading();
     resetError();
@@ -125,5 +128,5 @@ export function useRequest(promise, options = {}) {
     }
   }
 
-  return { isLoading, error, res, request };
+  return { isLoading, error, res, request, setRes };
 }

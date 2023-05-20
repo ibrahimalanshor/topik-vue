@@ -2,7 +2,7 @@
 import { reactive, inject } from 'vue';
 import { useToastStore } from '@/store/modules/toast.store';
 import { useString } from '@/composes/resource.compose';
-import { usePost } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { postChat } from '@/api/chat.api';
 import BaseInput from '@/components/base/base-input.vue';
 import { getFirstObjectValue } from '@/common/utils/object.util';
@@ -19,7 +19,7 @@ const emit = defineEmits(['created']);
 const emitter = inject('emitter');
 const toastStore = useToastStore();
 const { getString } = useString();
-const { error, post: storeChat } = usePost(postChat);
+const { error, request: storeChat } = useRequest(postChat);
 
 const form = reactive({
   content: null,

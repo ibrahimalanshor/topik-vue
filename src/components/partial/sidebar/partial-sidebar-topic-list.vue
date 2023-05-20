@@ -2,7 +2,7 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 import { computed, reactive, inject } from 'vue';
 import { useString } from '@/composes/resource.compose';
-import { useFetch } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { getTopics } from '@/api/topic.api';
 import BaseFetch from '@/components/base/base-fetch.vue';
 import BaseEmptyState from '@/components/base/base-empty-state.vue';
@@ -12,11 +12,17 @@ import PartialSidebarTopicItem from './partial-sidebar-topic-item.vue';
 const emitter = inject('emitter');
 const { getString } = useString();
 const {
-  data: topics,
+  res: topics,
   error,
   isLoading,
-  fetch: fetchTopic,
-} = useFetch(getTopics);
+  request: fetchTopic,
+} = useRequest(getTopics, {
+  initLoading: true,
+  initResponse: {
+    data: [],
+    meta: {},
+  },
+});
 
 const query = reactive({
   sort: '-id',

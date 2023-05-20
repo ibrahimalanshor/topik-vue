@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive, ref, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useFetch, usePost } from '@/composes/http.compose';
+import { useRequest } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
 import { useString } from '@/composes/resource.compose';
 import { getTopicById, patchTopic } from '@/api/topic.api';
@@ -18,13 +18,26 @@ const emitter = inject('emitter');
 const route = useRoute();
 const router = useRouter();
 const {
-  data: topic,
+  res: topic,
   error: topicError,
-  fetch: fetchTopicById,
-  setData: setTopic,
-} = useFetch(getTopicById, { single: true });
-const { data: chats, error: chatError, fetch: fetchChats } = useFetch(getChats);
-const { post: updateTopic } = usePost();
+  request: fetchTopicById,
+  setRes: setTopic,
+} = useRequest(getTopicById, {
+  initLoading: true,
+  initResponse: {},
+});
+const {
+  res: chats,
+  error: chatError,
+  request: fetchChats,
+} = useRequest(getChats, {
+  initLoading: true,
+  initResponse: {
+    data: [],
+    meta: {},
+  },
+});
+const { request: updateTopic } = useRequest();
 const {
   isLoading: isInitLoading,
   startLoading: startInitLoading,
