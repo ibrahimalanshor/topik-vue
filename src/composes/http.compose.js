@@ -84,3 +84,46 @@ export function usePost(promiseOrUrl) {
 
   return { error, isLoading, post };
 }
+
+export function useRequest(promise, options = {}) {
+  const { initLoading = false, initResponse = {} } = options;
+
+  const { error, resetError } = useError();
+  const { isLoading, startLoading, stopLoading } = useLoading(initLoading);
+
+  const res = ref(initResponse);
+
+  async function request(paramsOrPromise) {
+    startLoading();
+    resetError();
+
+    try {
+      const data = (
+        typeof paramsOrPromise === 'function'
+          ? await paramsOrPromise()
+          : await promise(paramsOrPromise)
+      ).data;
+
+      res.value = data;
+
+      return data;
+    } catch (err) {
+      if (err.response) {
+        error.server = true;
+        error.errors = err.response.data;
+      } else {
+        error.server = false;
+        error.errors = err;
+      }
+
+      error.message = 'Something Error';
+      error.value = true;
+
+      throw err;
+    } finally {
+      stopLoading();
+    }
+  }
+
+  return { isLoading, error, res, request };
+}
