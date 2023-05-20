@@ -4,7 +4,8 @@
         "load-more": "Load More",
         "send": "Send",
         "edit": "Edit",
-        "save": "Save"
+        "save": "Save",
+        "delete": "Delete"
     },
     "sidebar": {
         "label": {
@@ -19,6 +20,10 @@
         },
         "message": {
             "updated": "Topic Updated"
+        },
+        "label": {
+            "delete": "Delete Topic",
+            "delete-description": "Are you sure you want to delete this topic?"
         }
     },
     "chat": {

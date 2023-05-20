@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive, ref, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useFetch, usePost } from '@/composes/http.compose';
 import { useLoading } from '@/composes/loading.compose';
 import { useString } from '@/composes/resource.compose';
@@ -16,6 +16,7 @@ import TopicEditModal from '@/components/topic/topic-edit-modal.vue';
 
 const emitter = inject('emitter');
 const route = useRoute();
+const router = useRouter();
 const {
   data: topic,
   error: topicError,
@@ -104,6 +105,9 @@ function handleEdit() {
 function handleUpdated(res) {
   setTopic(res);
 }
+function handleDeleted() {
+  router.push({ name: 'index' });
+}
 
 init();
 </script>
@@ -157,6 +161,7 @@ init();
           :topic="topic"
           v-model="editTopicModalVisible"
           v-on:success="handleUpdated"
+          v-on:deleted="handleDeleted"
         />
       </template>
     </base-fetch>

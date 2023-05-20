@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, reactive, watch } from 'vue';
+import { computed, inject, reactive, ref, watch } from 'vue';
 import { useString } from '@/composes/resource.compose';
 import { useToastStore } from '@/store/modules/toast.store';
 import { usePost } from '@/composes/http.compose';
@@ -8,6 +8,7 @@ import { getFirstObjectValue } from '@/common/utils/object.util';
 import BaseModal from '@/components/base/base-modal.vue';
 import BaseInput from '@/components/base/base-input.vue';
 import BaseButton from '@/components/base/base-button.vue';
+import TopicDeleteConfirm from './topic-delete-confirm.vue';
 
 const props = defineProps({
   modelValue: {
@@ -16,7 +17,7 @@ const props = defineProps({
   },
   topic: Object,
 });
-const emit = defineEmits(['update:modelValue', 'success']);
+const emit = defineEmits(['update:modelValue', 'success', 'deleted']);
 
 const emitter = inject('emitter');
 const { getString } = useString();
@@ -31,6 +32,7 @@ const visible = computed({
     emit('update:modelValue', value);
   },
 });
+const visibleDeleteConfirm = ref(false);
 const form = reactive({
   name: null,
 });
@@ -68,6 +70,14 @@ async function handleSubmit() {
     });
   }
 }
+function handleDelete() {
+  visibleDeleteConfirm.value = true;
+}
+function handleDeleted() {
+  visible.value = false;
+
+  emit('deleted');
+}
 
 watch(visible, () => {
   if (visible.value) {
@@ -85,11 +95,29 @@ watch(visible, () => {
         with-label
         v-model="form.name"
       />
-      <div class="flex justify-end">
-        <base-button :disabled="isLoading" :loading="isLoading" color="black">{{
-          getString('common.save')
-        }}</base-button>
+      <div class="flex justify-end gap-x-2">
+        <base-button
+          type="submit"
+          :disabled="isLoading"
+          :loading="isLoading"
+          color="black"
+          >{{ getString('common.save') }}</base-button
+        >
+        <base-button
+          type="button"
+          :disabled="isLoading"
+          :loading="isLoading"
+          color="red"
+          v-on:click="handleDelete"
+          >{{ getString('common.delete') }}</base-button
+        >
       </div>
     </form>
+
+    <topic-delete-confirm
+      :topic="props.topic"
+      v-model="visibleDeleteConfirm"
+      v-on:success="handleDeleted"
+    />
   </base-modal>
 </template>

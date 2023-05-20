@@ -44,6 +44,7 @@ const style = computed(() => {
   const colors = {
     white: 'bg-white text-gray-900 hover:bg-gray-50 ring-gray-300',
     black: 'bg-gray-900 text-white hover:bg-gray-800 ring-gray-900',
+    red: 'bg-red-600 text-white hover:bg-red-500 ring-red-600',
   };
   const sizes = {
     xs: 'rounded px-2 py-1 text-xs',
