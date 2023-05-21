@@ -15,7 +15,7 @@ const props = defineProps({
     default: false,
   },
 });
-const emit = defineEmits(['created', 'load-more']);
+const emit = defineEmits(['created', 'load-more', 'reload']);
 
 const emitter = inject('emitter');
 const checkpoint = reactive({
@@ -64,6 +64,9 @@ function handleScroll(e) {
 function handleCreated(chat) {
   emit('created', chat);
 }
+function handleUpdatedChat() {
+  emit('reload');
+}
 
 emitter.on('chat-created-and-reloaded', () => {
   scrollToBottom();
@@ -100,7 +103,7 @@ onMounted(() => {
           >
             {{ formatDate(chat.created_at, 'DD MMMM YYYY') }}
           </base-separator>
-          <chat-list-item :chat="chat" />
+          <chat-list-item :chat="chat" v-on:updated="handleUpdatedChat" />
         </template>
       </div>
     </template>
