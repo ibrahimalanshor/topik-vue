@@ -4,18 +4,22 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { formatDate } from '@/common/utils/date.util';
 import { useToastStore } from '@/store/modules/toast.store';
 import { useRequest } from '@/composes/http.compose.js';
+import { useString } from '@/composes/resource.compose';
 import { patchChat } from '@/api/chat.api.js';
 import BaseInput from '@/components/base/base-input.vue';
+import ChatDeleteConfirm from './chat-delete-confirm.vue';
 
 const props = defineProps({
   chat: Object,
 });
-const emit = defineEmits(['updated']);
+const emit = defineEmits(['updated', 'deleted']);
 
 const toastStore = useToastStore();
+const { getString } = useString();
 const { error, request: updateChat } = useRequest();
 
 const editing = ref(false);
+const deleteConfirmVisible = ref(false);
 const form = reactive({
   content: props.chat.content,
 });
@@ -47,6 +51,12 @@ async function handleSubmitEdit() {
     });
   }
 }
+function handleDelete() {
+  deleteConfirmVisible.value = true;
+}
+function handleDeleted() {
+  emit('deleted');
+}
 </script>
 
 <template>
@@ -67,6 +77,7 @@ async function handleSubmitEdit() {
         </button>
         <button
           class="p-1 bg-white hover:bg-gray-100 text-gray-400 hover:text-gray-500 rounded-r"
+          v-on:click="handleDelete"
         >
           <trash-icon class="w-4 h-4" />
         </button>
@@ -79,11 +90,16 @@ async function handleSubmitEdit() {
     >
       <base-input
         with-message
-        message="enter to save, esc to cancel"
+        :message="getString('chat.label.edit-hint')"
         v-model="form.content"
         v-on:esc="handleCancelEdit"
         v-on:blur="handleCancelEdit"
       />
     </form>
+    <chat-delete-confirm
+      :chat="props.chat"
+      v-model="deleteConfirmVisible"
+      v-on:success="handleDeleted"
+    />
   </div>
 </template>

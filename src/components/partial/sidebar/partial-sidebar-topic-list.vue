@@ -57,7 +57,7 @@ emitter.on('topic-created', () => {
 emitter.on('topic-updated', () => {
   refresh();
 });
-emitter.on('topic-updated', () => {
+emitter.on('topic-deleted', () => {
   refresh();
 });
 

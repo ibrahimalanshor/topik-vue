@@ -67,6 +67,7 @@ const style = computed(() => {
         : 'focus:outline-none focus:ring-0',
       props.customSize ?? 'py-1.5',
     ],
+    message: 'mt-2 text-sm text-gray-500',
   };
 });
 
@@ -110,8 +111,8 @@ onMounted(() => {
         v-on:keydown.esc="handleEsc"
         v-on:blur="handleBlur"
       />
-      <slot v-if="props.withMessage" name="message">
-        <p class="mt-2 text-sm text-gray-500" id="email-description">
+      <slot v-if="props.withMessage" name="message" :classes="style">
+        <p :class="style.message">
           {{ props.message }}
         </p>
       </slot>

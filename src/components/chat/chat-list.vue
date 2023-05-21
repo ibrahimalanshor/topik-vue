@@ -67,6 +67,9 @@ function handleCreated(chat) {
 function handleUpdatedChat() {
   emit('reload');
 }
+function handleDeletedChat() {
+  emit('reload');
+}
 
 emitter.on('chat-created-and-reloaded', () => {
   scrollToBottom();
@@ -103,7 +106,11 @@ onMounted(() => {
           >
             {{ formatDate(chat.created_at, 'DD MMMM YYYY') }}
           </base-separator>
-          <chat-list-item :chat="chat" v-on:updated="handleUpdatedChat" />
+          <chat-list-item
+            :chat="chat"
+            v-on:updated="handleUpdatedChat"
+            v-on:deleted="handleDeletedChat"
+          />
         </template>
       </div>
     </template>

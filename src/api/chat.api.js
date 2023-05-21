@@ -15,3 +15,7 @@ export async function postChat(body) {
 export async function patchChat(id, body) {
   return (await axios.patch(`/api/chats/${id}`, body)).data;
 }
+
+export async function deleteChat(id) {
+  return (await axios.delete(`/api/chats/${id}`)).data;
+}
