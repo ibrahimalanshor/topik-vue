@@ -61,10 +61,13 @@ const editTopicModalVisible = ref(false);
 async function loadTopic() {
   await fetchTopicById(route.params.id);
 }
+async function loadChats() {
+  await fetchChats(fetchChatsQuery);
+}
 async function loadData() {
   try {
     await loadTopic();
-    await fetchChats(fetchChatsQuery);
+    await loadChats();
   } catch (err) {
     // console.log(err);
   }
@@ -121,6 +124,9 @@ function handleUpdated(res) {
 function handleDeleted() {
   router.push({ name: 'index' });
 }
+function handleReloadChat() {
+  loadChats();
+}
 
 init();
 </script>
@@ -163,6 +169,7 @@ init();
           :loading="isLoadMoreLoading"
           v-on:load-more="handleLoadMore"
           v-on:created="handleCreatedChat"
+          v-on:reload="handleReloadChat"
         />
         <chat-create
           :topic-id="topic.id"

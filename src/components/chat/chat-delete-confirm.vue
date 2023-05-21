@@ -1,8 +1,8 @@
 <script setup>
-import { computed, inject } from 'vue';
+import { computed } from 'vue';
 import { useString } from '@/composes/resource.compose';
 import { useRequest } from '@/composes/http.compose';
-import { deleteTopic } from '@/api/topic.api';
+import { deleteChat } from '@/api/chat.api';
 import { useToastStore } from '@/store/modules/toast.store';
 import BaseConfirm from '@/components/base/base-confirm.vue';
 
@@ -11,18 +11,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  topic: Object,
+  chat: Object,
 });
 const emit = defineEmits(['update:modelValue', 'success']);
 
-const emitter = inject('emitter');
 const { getString } = useString();
 const toastStore = useToastStore();
-const {
-  isLoading,
-  error,
-  request: requestDeleteTopic,
-} = useRequest(deleteTopic);
+const { isLoading, error, request: requestDeleteChat } = useRequest(deleteChat);
 
 const visible = computed({
   get: function () {
@@ -35,15 +30,14 @@ const visible = computed({
 
 async function handleConfirm() {
   try {
-    await requestDeleteTopic(props.topic.id);
+    await requestDeleteChat(props.chat.id);
 
     visible.value = false;
 
     emit('success');
-    emitter.emit('topic-deleted');
   } catch (err) {
     toastStore.createToast({
-      id: 'error-delete-topic',
+      id: 'error-delete-chat',
       message: error.message,
       color: 'red',
     });
@@ -54,8 +48,8 @@ async function handleConfirm() {
 <template>
   <base-confirm
     variant="error"
-    :title="getString('topic.label.delete')"
-    :description="getString('topic.label.delete-description')"
+    :title="getString('chat.label.delete')"
+    :description="getString('chat.label.delete-description')"
     :loading="isLoading"
     v-model="visible"
     v-on:confirm="handleConfirm"

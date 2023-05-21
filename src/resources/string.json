@@ -31,7 +31,10 @@
             "start-chat-title": "Start Chat",
             "start-chat-description": "Start the topic chat with sending first message",
             "start-chat-placeholder": "Hello World",
-            "content-placeholder": "Enter to save"
+            "content-placeholder": "Enter to save",
+            "edit-hint": "enter to save, esc to cancel",
+            "delete": "Delete Chat",
+            "delete-description": "Are you sure you want to delete this chat?"
         }
     }
 }
