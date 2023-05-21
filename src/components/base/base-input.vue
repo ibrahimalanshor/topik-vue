@@ -34,8 +34,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  withMessage: {
+    type: Boolean,
+    default: false,
+  },
+  message: String,
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'esc', 'blur']);
 
 const input = ref();
 const value = computed({
@@ -68,10 +73,12 @@ const style = computed(() => {
 function setAutofocus() {
   props.autofocus && input.value.focus();
 }
-
-onMounted(() => {
-  setAutofocus();
-});
+function handleEsc() {
+  emit('esc');
+}
+function handleBlur() {
+  emit('blur');
+}
 
 watch(
   () => props.autofocus,
@@ -79,6 +86,10 @@ watch(
     setAutofocus();
   }
 );
+
+onMounted(() => {
+  setAutofocus();
+});
 </script>
 
 <template>
@@ -96,7 +107,14 @@ watch(
         :class="style.base"
         :placeholder="props.placeholder"
         v-model="value"
+        v-on:keydown.esc="handleEsc"
+        v-on:blur="handleBlur"
       />
+      <slot v-if="props.withMessage" name="message">
+        <p class="mt-2 text-sm text-gray-500" id="email-description">
+          {{ props.message }}
+        </p>
+      </slot>
     </div>
   </div>
 </template>
