@@ -61,6 +61,7 @@ const style = computed(() => {
     props.shadowed ? 'shadow-sm' : '',
     props.bordered ? 'ring-1 ring-inset' : '',
     props.block ? 'w-full' : '',
+    props.disabled ? 'opacity-50' : '',
   ];
 });
 
