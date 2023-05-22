@@ -46,6 +46,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  preventSubmit: {
+    type: Boolean,
+    default: false,
+  },
   classes: {
     type: Object,
     default: () => ({
@@ -111,10 +115,12 @@ function handleBlur() {
   emit('blur');
 }
 function handleEnter(e) {
-  if (!e.shiftKey) {
-    e.preventDefault();
+  if (props.preventSubmit) {
+    if (!e.shiftKey) {
+      e.preventDefault();
 
-    emit('submit');
+      emit('submit');
+    }
   }
 }
 

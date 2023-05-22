@@ -69,6 +69,7 @@ async function handleSubmit() {
         textarea
         autogrow
         rows="1"
+        prevent-submit
         v-model="form.content"
         v-on:submit="handleSubmit"
       />

@@ -28,6 +28,7 @@
     },
     "chat": {
         "label": {
+            "content-empty-validation": "Content cannot be empty",
             "start-chat-title": "Start Chat",
             "start-chat-description": "Start the topic chat with sending first message",
             "start-chat-placeholder": "Hello World",

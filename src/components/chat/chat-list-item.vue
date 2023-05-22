@@ -5,6 +5,7 @@ import { formatDate } from '@/common/utils/date.util';
 import { useToastStore } from '@/store/modules/toast.store';
 import { useRequest } from '@/composes/http.compose.js';
 import { useString } from '@/composes/resource.compose';
+import { parseMarkdown } from '@/common/utils/markdown.util';
 import { patchChat } from '@/api/chat.api.js';
 import BaseInput from '@/components/base/base-input.vue';
 import ChatDeleteConfirm from './chat-delete-confirm.vue';
@@ -38,7 +39,6 @@ async function handleSubmitEdit() {
     editing.value = false;
     emit('updated');
   } catch (err) {
-    console.log(err);
     const message =
       error.server && error.errors.status === 422
         ? getFirstObjectValue(error.errors.errors)
@@ -65,7 +65,10 @@ function handleDeleted() {
       {{ formatDate(props.chat.created_at, 'HH:mm:ss') }}
     </p>
     <template v-if="!editing">
-      <p class="inline text-gray-900 break-all">{{ props.chat.content }}</p>
+      <p
+        class="inline text-gray-900 break-all"
+        v-html="parseMarkdown(props.chat.content)"
+      ></p>
       <div
         class="absolute -top-4 right-8 z-10 hidden group-hover:block shadow rounded mt-1"
       >
@@ -93,6 +96,7 @@ function handleDeleted() {
         :message="getString('chat.label.edit-hint')"
         textarea
         autogrow
+        prevent-submit
         v-model="form.content"
         v-on:esc="handleCancelEdit"
         v-on:blur="handleCancelEdit"
