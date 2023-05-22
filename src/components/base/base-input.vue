@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, onMounted, watch, nextTick } from 'vue';
 
 const props = defineProps({
   modelValue: null,
@@ -38,9 +38,24 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  textarea: {
+    type: Boolean,
+    default: false,
+  },
+  autogrow: {
+    type: Boolean,
+    default: false,
+  },
+  classes: {
+    type: Object,
+    default: () => ({
+      base: '',
+    }),
+  },
   message: String,
+  rows: String,
 });
-const emit = defineEmits(['update:modelValue', 'esc', 'blur']);
+const emit = defineEmits(['update:modelValue', 'esc', 'blur', 'submit']);
 
 const input = ref();
 const value = computed({
@@ -59,6 +74,7 @@ const style = computed(() => {
   return {
     base: [
       colors[props.color],
+      props.classes.base,
       props.textLeading ? 'sm:leading-6' : '',
       props.shadowed ? 'shadow-sm' : '',
       props.rounded ? 'rounded-md' : '',
@@ -70,15 +86,36 @@ const style = computed(() => {
     message: 'mt-2 text-sm text-gray-500',
   };
 });
+const attributes = computed(() => ({
+  class: [
+    style.value.base,
+    'block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm overflow-hidden',
+    props.autogrow ? 'resize-none' : '',
+  ],
+  placeholder: props.placeholder,
+}));
 
 function setAutofocus() {
   props.autofocus && input.value.focus();
+}
+function setHeight() {
+  if (props.autogrow) {
+    input.value.style.height = '16px';
+    input.value.style.height = `${input.value.scrollHeight}px`;
+  }
 }
 function handleEsc() {
   emit('esc');
 }
 function handleBlur() {
   emit('blur');
+}
+function handleEnter(e) {
+  if (!e.shiftKey) {
+    e.preventDefault();
+
+    emit('submit');
+  }
 }
 
 watch(
@@ -87,9 +124,19 @@ watch(
     setAutofocus();
   }
 );
+watch(value, async () => {
+  if (props.autogrow) {
+    await nextTick();
+    setHeight();
+  }
+});
 
 onMounted(() => {
   setAutofocus();
+
+  if (props.autogrow) {
+    setHeight();
+  }
 });
 </script>
 
@@ -101,14 +148,24 @@ onMounted(() => {
       >{{ props.label }}</label
     >
     <div :class="{ 'mt-2': props.withLabel }">
-      <input
+      <textarea
+        v-if="props.textarea"
         ref="input"
-        type="text"
-        class="block w-full border-0 text-gray-900 placeholder:text-gray-400 placeholder:text-sm text-sm"
-        :class="style.base"
-        :placeholder="props.placeholder"
+        :rows="rows"
+        v-bind="attributes"
         v-model="value"
         v-on:keydown.esc="handleEsc"
+        v-on:keydown.enter="handleEnter"
+        v-on:blur="handleBlur"
+      />
+      <input
+        v-else
+        ref="input"
+        type="text"
+        v-bind="attributes"
+        v-model="value"
+        v-on:keydown.esc="handleEsc"
+        v-on:keydown.enter="handleEnter"
         v-on:blur="handleBlur"
       />
       <slot v-if="props.withMessage" name="message" :classes="style">
