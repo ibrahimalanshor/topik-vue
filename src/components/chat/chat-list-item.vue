@@ -93,6 +93,7 @@ function handleDeleted() {
         :message="getString('chat.label.edit-hint')"
         textarea
         autogrow
+        prevent-submit
         v-model="form.content"
         v-on:esc="handleCancelEdit"
         v-on:blur="handleCancelEdit"

@@ -64,6 +64,7 @@ async function handleSubmit() {
           v-model="form.content"
         />
         <base-button
+          type="submit"
           :disabled="isLoading"
           :loading="isLoading"
           color="black"
