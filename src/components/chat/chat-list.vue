@@ -3,8 +3,8 @@ import { computed, ref, reactive, onMounted, inject } from 'vue';
 import { isSameDay, formatDate } from '@/common/utils/date.util';
 import BaseSpinner from '@/components/base/base-spinner.vue';
 import BaseSeparator from '@/components/base/base-separator.vue';
-import ChatEmptyState from './chat-empty-state.vue';
 import ChatListItem from './chat-list-item.vue';
+import ChatListEmpty from './chat-list-empty.vue';
 
 const props = defineProps({
   chats: Object,
@@ -89,7 +89,7 @@ onMounted(() => {
     class="flex-grow max-h-screen overflow-y-auto py-4"
     v-on:scroll="handleScroll"
   >
-    <chat-empty-state
+    <chat-list-empty
       v-if="chats.meta.count < 1"
       :topic-id="topic.id"
       v-on:created="handleCreated"

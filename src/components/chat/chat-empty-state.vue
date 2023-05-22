@@ -1,45 +1,30 @@
 <script setup>
 import { reactive } from 'vue';
 import { ChatBubbleBottomCenterIcon } from '@heroicons/vue/24/outline';
-import { useRequest } from '@/composes/http.compose';
-import { useToastStore } from '@/store/modules/toast.store';
 import { useString } from '@/composes/resource.compose';
 import BaseInput from '@/components/base/base-input.vue';
 import BaseButton from '@/components/base/base-button.vue';
-import { postChat } from '@/api/chat.api';
-import { getFirstObjectValue } from '@/common/utils/object.util';
 
 const props = defineProps({
-  topicId: [Number, String],
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  disabledIfEmpty: {
+    type: Boolean,
+    default: false,
+  },
 });
-const emit = defineEmits(['created']);
+const emit = defineEmits(['submit']);
 
-const toastStore = useToastStore();
 const { getString } = useString();
-const { isLoading, error, request: storeChat } = useRequest(postChat);
 
 const form = reactive({
   content: null,
-  topic_id: props.topicId,
 });
 
 async function handleSubmit() {
-  try {
-    const chat = await storeChat(form);
-
-    emit('created', chat);
-  } catch (err) {
-    const message =
-      error.server && error.errors.status === 422
-        ? getFirstObjectValue(error.errors.errors)
-        : error.message;
-
-    toastStore.createToast({
-      id: 'error-create-chat',
-      message: message,
-      color: 'red',
-    });
-  }
+  emit('submit', form);
 }
 </script>
 
@@ -65,8 +50,8 @@ async function handleSubmit() {
         />
         <base-button
           type="submit"
-          :disabled="isLoading"
-          :loading="isLoading"
+          :disabled="props.loading || (props.disabledIfEmpty && !form.content)"
+          :loading="props.loading"
           color="black"
           :classes="{
             button: 'flex-shrink-0',
