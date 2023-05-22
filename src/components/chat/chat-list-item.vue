@@ -91,9 +91,12 @@ function handleDeleted() {
       <base-input
         with-message
         :message="getString('chat.label.edit-hint')"
+        textarea
+        autogrow
         v-model="form.content"
         v-on:esc="handleCancelEdit"
         v-on:blur="handleCancelEdit"
+        v-on:submit="handleSubmitEdit"
       />
     </form>
     <chat-delete-confirm
