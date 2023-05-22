@@ -54,7 +54,7 @@ async function handleSubmit() {
 
 <template>
   <div
-    class="z-40 flex h-16 shrink-0 items-center gap-x-4 border-t border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
+    class="z-40 min-h-16 border-t border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
   >
     <form class="w-full" v-on:submit.prevent="handleSubmit">
       <base-input
@@ -62,9 +62,15 @@ async function handleSubmit() {
         :shadowed="false"
         :rounded="false"
         :autofocus="props.autofocus"
-        custom-size="p-0"
+        :classes="{
+          base: 'py-5 px-0',
+        }"
         :placeholder="getString('chat.label.content-placeholder')"
+        textarea
+        autogrow
+        rows="1"
         v-model="form.content"
+        v-on:submit="handleSubmit"
       />
     </form>
   </div>
