@@ -1,5 +1,10 @@
-<script setup>
+<script>
 import PartialSidebar from '@/components/partial/sidebar/partial-sidebar.vue';
+
+export default {
+  name: 'LayoutApp',
+  components: { PartialSidebar },
+};
 </script>
 
 <template>
