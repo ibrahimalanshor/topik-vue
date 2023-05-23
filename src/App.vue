@@ -6,7 +6,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <component :is="route.meta.layout">
+  <component :is="route.meta.layout || 'div'">
     <partial-toast />
     <router-view :key="route.path" />
   </component>

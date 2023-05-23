@@ -19,6 +19,9 @@ export const routes = [
         path: ':id',
         name: 'topic.detail',
         component: () => import('@/pages/topic/topic-detail-page.vue'),
+        meta: {
+          layout: 'layout-app',
+        },
       },
     ],
   },
