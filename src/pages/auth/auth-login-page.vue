@@ -1,30 +1,36 @@
 <script setup>
 import { reactive } from 'vue';
 import { RocketLaunchIcon } from '@heroicons/vue/24/outline';
+import { useToastStore } from '@/store/modules/toast.store';
 import { useString } from '@/composes/resource.compose';
+import { useRequest } from '@/composes/http.compose';
 import BaseInput from '@/components/base/base-input.vue';
 import BaseButton from '@/components/base/base-button.vue';
-
-const props = defineProps({
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  disabledIfEmpty: {
-    type: Boolean,
-    default: false,
-  },
-});
-const emit = defineEmits(['submit']);
+import { postLogin } from '@/api/auth.api';
 
 const { getString } = useString();
+const toastStore = useToastStore();
+const { error, isLoading, request: login } = useRequest(postLogin);
 
 const form = reactive({
   password: null,
 });
 
 async function handleSubmit() {
-  emit('submit', form);
+  try {
+    await login(form);
+  } catch (err) {
+    const message =
+      error.server && error.errors.status === 422
+        ? getFirstObjectValue(error.errors.errors)
+        : error.message;
+
+    toastStore.createToast({
+      id: 'error-login',
+      message: message,
+      color: 'red',
+    });
+  }
 }
 </script>
 
@@ -45,10 +51,8 @@ async function handleSubmit() {
           />
           <base-button
             type="submit"
-            :disabled="
-              props.loading || (props.disabledIfEmpty && !form.password)
-            "
-            :loading="props.loading"
+            :disabled="isLoading"
+            :loading="isLoading"
             color="black"
             :classes="{
               button: 'flex-shrink-0',
