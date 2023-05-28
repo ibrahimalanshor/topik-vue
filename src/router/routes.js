@@ -12,6 +12,9 @@ export const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/pages/auth/auth-login-page.vue'),
+    meta: {
+      requireGuest: true,
+    },
   },
   {
     path: '/topic',
