@@ -7,3 +7,7 @@ export function isSameDay(fdate, sdate) {
 export function formatDate(date, format = null) {
   return dayjs(date).format(format);
 }
+
+export function isLowerThanNow(date) {
+  return dayjs(date).isBefore(dayjs());
+}
