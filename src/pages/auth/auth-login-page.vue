@@ -1,15 +1,20 @@
 <script setup>
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import { RocketLaunchIcon } from '@heroicons/vue/24/outline';
 import { useToastStore } from '@/store/modules/toast.store';
+import { useAuthStore } from '@/store/modules/auth.store';
 import { useString } from '@/composes/resource.compose';
 import { useRequest } from '@/composes/http.compose';
+import { getFirstObjectValue } from '@/common/utils/object.util';
 import BaseInput from '@/components/base/base-input.vue';
 import BaseButton from '@/components/base/base-button.vue';
 import { postLogin } from '@/api/auth.api';
 
 const { getString } = useString();
+const router = useRouter();
 const toastStore = useToastStore();
+const authStore = useAuthStore();
 const { error, isLoading, request: login } = useRequest(postLogin);
 
 const form = reactive({
@@ -18,11 +23,17 @@ const form = reactive({
 
 async function handleSubmit() {
   try {
-    await login(form);
+    const res = await login(form);
+
+    authStore.login(res);
+    router.push({ name: 'index' });
   } catch (err) {
     const message =
-      error.server && error.errors.status === 422
-        ? getFirstObjectValue(error.errors.errors)
+      error.server &&
+      (error.errors.status === 422 || error.errors.status === 401)
+        ? error.errors.status === 422
+          ? getFirstObjectValue(error.errors.errors)
+          : error.errors.message
         : error.message;
 
     toastStore.createToast({
