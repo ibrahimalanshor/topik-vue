@@ -1,7 +1,7 @@
 {
   "name": "topik-vue",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,10 +10,20 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.0.18",
+    "axios": "^1.4.0",
+    "click-outside-vue3": "^4.0.1",
+    "dayjs": "^1.11.7",
+    "jwt-decode": "^3.1.2",
+    "marked": "^5.0.2",
+    "mitt": "^3.0.0",
+    "pinia": "^2.0.36",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@tailwindcss/forms": "^0.5.3",
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.39.0",

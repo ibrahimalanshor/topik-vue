@@ -1,0 +1,47 @@
+{
+    "common": {
+        "empty": "Empty",
+        "load-more": "Load More",
+        "send": "Send",
+        "edit": "Edit",
+        "save": "Save",
+        "delete": "Delete"
+    },
+    "sidebar": {
+        "label": {
+            "new-topic": "New Topic",
+            "setting": "Setting",
+            "topic-list": "Topic List"
+        }
+    },
+    "topic": {
+        "attributes": {
+            "name": "Name"
+        },
+        "message": {
+            "updated": "Topic Updated"
+        },
+        "label": {
+            "delete": "Delete Topic",
+            "delete-description": "Are you sure you want to delete this topic?"
+        }
+    },
+    "chat": {
+        "label": {
+            "content-empty-validation": "Content cannot be empty",
+            "start-chat-title": "Start Chat",
+            "start-chat-description": "Start the topic chat with sending first message",
+            "start-chat-placeholder": "Hello World",
+            "content-placeholder": "Enter to save",
+            "edit-hint": "enter to save, esc to cancel",
+            "delete": "Delete Chat",
+            "delete-description": "Are you sure you want to delete this chat?"
+        }
+    },
+    "login": {
+        "label": {
+            "password": "Password",
+            "submit": "Login"
+        }
+    }
+}
