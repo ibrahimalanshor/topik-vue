@@ -5,6 +5,7 @@ export const routes = [
     component: () => import('@/pages/index-page.vue'),
     meta: {
       layout: 'layout-app',
+      requireAuth: true,
     },
   },
   {
@@ -14,6 +15,9 @@ export const routes = [
   },
   {
     path: '/topic',
+    meta: {
+      requireAuth: true,
+    },
     children: [
       {
         path: ':id',
