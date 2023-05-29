@@ -4,6 +4,7 @@ export const routes = [
     name: 'index',
     component: () => import('@/pages/index-page.vue'),
     meta: {
+      title: 'home',
       layout: 'layout-app',
       requireAuth: true,
     },
@@ -13,6 +14,7 @@ export const routes = [
     name: 'login',
     component: () => import('@/pages/auth/auth-login-page.vue'),
     meta: {
+      title: 'login',
       requireGuest: true,
     },
   },
@@ -27,6 +29,7 @@ export const routes = [
         name: 'topic.detail',
         component: () => import('@/pages/topic/topic-detail-page.vue'),
         meta: {
+          title: 'topic.detail',
           layout: 'layout-app',
         },
       },
