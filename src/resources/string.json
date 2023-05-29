@@ -7,6 +7,14 @@
         "save": "Save",
         "delete": "Delete"
     },
+    "pages": {
+        "base": "Topik - {title}",
+        "home": "Topik - Home",
+        "login": "Topik - Login",
+        "topic": {
+            "detail": "Topik - Chats"
+        }
+    },
     "sidebar": {
         "label": {
             "new-topic": "New Topic",

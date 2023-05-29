@@ -58,8 +58,15 @@ const fetchChatsQuery = reactive({
 });
 const editTopicModalVisible = ref(false);
 
+function setTitleFromTopic() {
+  document.title = getString('pages.base', {
+    title: topic.value.name || 'Untitled',
+  });
+}
 async function loadTopic() {
   await fetchTopicById(route.params.id);
+
+  setTitleFromTopic();
 }
 async function loadChats() {
   await fetchChats(fetchChatsQuery);
@@ -93,6 +100,7 @@ async function handleCreatedChat(chat) {
       );
 
       setTopic(res);
+      setTitleFromTopic();
 
       emitter.emit('topic-updated');
     }
@@ -120,6 +128,7 @@ function handleEdit() {
 }
 function handleUpdated(res) {
   setTopic(res);
+  setTitleFromTopic();
 }
 function handleDeleted() {
   router.push({ name: 'index' });
